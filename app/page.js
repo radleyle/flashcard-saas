@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import getStripe from '@/utils/get-stripe'
-import { SignedIn, SignedOut, SignInButton, SignOutButton } from '@clerk/nextjs'
+import Link from 'next/link' // Import the Link component
+
 import {Container} from '@mui/material'
 import Head from 'next/head'
 import { Box, AppBar, Toolbar, Typography, Button, Grid, UserButton } from '@mui/material'
@@ -12,21 +13,6 @@ export default function Home() {
                 <title>Flashcard Creator</title>
                 <meta name="description" content="Create flashcards for your next quiz or test" />
             </Head>
-
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" style={{flexGrow: 1}}>
-                        Flashcard Saas
-                    </Typography>
-                    <SignedOut>
-                        <Button> Log in</Button>
-                        <Button> Sign up</Button>
-                    </SignedOut>
-                    <SignedIn>
-                        <UserButton />
-                    </SignedIn>
-                </Toolbar>
-            </AppBar>
 
             <Box
                 sx={{
@@ -41,9 +27,14 @@ export default function Home() {
                     {''}
                     The easiest way to create flashcards for your next quiz or test
                 </Typography>
-                <Button variant="contained" color="primary" sx={{mt: 2}}>
+                {/* <Button variant="contained" color="primary" sx={{mt: 2}}>
                     Get Started
-                </Button>
+                </Button> */}
+                <Link href="/get-started" passHref>
+                    <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+                        Get Started
+                    </Button>
+                </Link>
             </Box>
             <Box sx={{mt: 6}}>
                 <Typography variant="h4" gutterBottom>
