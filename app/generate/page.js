@@ -1,4 +1,6 @@
 'use client'
+import Grid from '@mui/material/Grid'; // For Material-UI
+
 
 import { useState } from 'react'
 import {
@@ -7,6 +9,8 @@ import {
   Button,
   Typography,
   Box,
+  Card,
+  CardContent
 } from '@mui/material'
 
 export default function Generate() {
