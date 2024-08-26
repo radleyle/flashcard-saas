@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import getStripe from '@/utils/get-stripe'
-import { SignedIn, SignedOut, SignInButton, SignOutButton } from '@clerk/nextjs'
+
 import {Container} from '@mui/material'
 import Head from 'next/head'
 import { Box, AppBar, Toolbar, Typography, Button, Grid, UserButton } from '@mui/material'
@@ -13,7 +13,7 @@ export default function Home() {
                 <meta name="description" content="Create flashcards for your next quiz or test" />
             </Head>
 
-            <AppBar position="static">
+            {/* <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" style={{flexGrow: 1}}>
                         Flashcard Saas
@@ -26,7 +26,7 @@ export default function Home() {
                         <UserButton />
                     </SignedIn>
                 </Toolbar>
-            </AppBar>
+            </AppBar> */}
 
             <Box
                 sx={{
