@@ -24,29 +24,73 @@ Return in the following JSON format:
     ]
 }`;
 
+// export async function POST(req) {
+//     const openai = new OpenAI({
+//         baseURL: "https://openrouter.ai/api/v1", // Base URL for OpenRouter.ai
+//         apiKey: process.env.OPENROUTER_API_KEY, // Use OpenRouter API key from .env.local file
+//         defaultHeaders: {
+//           "HTTP-Referer": process.env.SITE_URL, // Optional: Referer for OpenRouter rankings
+//           "X-Title": process.env.SITE_NAME, // Optional: Site name for OpenRouter rankings
+//         },
+//       });
+//     const data = await req.text()
+
+//     const completion = await openai.chat.completions.create({
+//         message: [
+//             {role: "system", content: systemPrompt},
+//             {role: "user", content: data},
+//         ],
+//         model: 'meta-llama/llama-3.1-8b-instruct:free',
+//         response_format: {type: "json_object"},
+//     })
+
+//     const flashcards = JSON.parse(completion.choices[0].message.content)
+
+//     return NextResponse.json(flashcards.flashcard)
+// }
+// export async function POST(req) {
+//     const openai = new OpenAI()
+//     const data = await req.text()
+  
+//     const completion = await openai.chat.completions.create({
+//       messages: [
+//         { role: 'system', content: systemPrompt },
+//         { role: 'user', content: data },
+//       ],
+//       model: 'gpt-4o',
+//       response_format: { type: 'json_object' },
+//     })
+  
+//     // Parse the JSON response from the OpenAI API
+//     const flashcards = JSON.parse(completion.choices[0].message.content)
+  
+//     // Return the flashcards as a JSON response
+//     return NextResponse.json(flashcards.flashcards)
+//   }
 export async function POST(req) {
     const openai = new OpenAI({
-        baseURL: "https://openrouter.ai/api/v1", // Base URL for OpenRouter.ai
-        apiKey: process.env.OPENROUTER_API_KEY, // Use OpenRouter API key from .env.local file
-        defaultHeaders: {
-          "HTTP-Referer": process.env.SITE_URL, // Optional: Referer for OpenRouter rankings
-          "X-Title": process.env.SITE_NAME, // Optional: Site name for OpenRouter rankings
-        },
-      });
-    const data = await req.text()
+        apiKey: process.env.OPENROUTER_API_KEY, // Correctly set API key
+        baseURL: "https://openrouter.ai/api/v1", // Correct base URL
+    });
 
-    const completion = await openai.chat.completions.create({
-        message: [
-            {role: "system", content: systemPrompt},
-            {role: "user", content: data},
-        ],
-        model: 'meta-llama/llama-3.1-8b-instruct:free',
-        response_format: {type: "json_object"},
-    })
+    try {
+        const data = await req.text();
 
-    const flashcards = JSON.parse(completion.choices[0].message.content)
+        const completion = await openai.chat.completions.create({
+            messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: data },
+            ],
+            model: 'openai/gpt-3.5-turbo', // Ensure this is the correct model name
+        });
 
-    return NextResponse.json(flashcards.flashcard)
+        const flashcards = JSON.parse(completion.choices[0].message.content);
+
+        return NextResponse.json(flashcards.flashcards);
+
+    } catch (error) {
+        console.error("Error during API request:", error.message);
+        console.error("Stack trace:", error.stack);
+        return NextResponse.json({ error: "An error occurred while processing your request." }, { status: 500 });
+    }
 }
-
-

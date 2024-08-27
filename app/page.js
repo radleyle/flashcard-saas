@@ -30,7 +30,7 @@ export default function Home() {
                 {/* <Button variant="contained" color="primary" sx={{mt: 2}}>
                     Get Started
                 </Button> */}
-                <Link href="/get-started" passHref>
+                <Link href="/generate" passHref>
                     <Button variant="contained" color="primary" sx={{ mt: 2 }}>
                         Get Started
                     </Button>
