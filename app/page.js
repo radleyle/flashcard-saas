@@ -1,11 +1,28 @@
+'use client'
 import Image from 'next/image'
 import getStripe from '@/utils/get-stripe'
 import Link from 'next/link' // Import the Link component
 
+
 import {Container} from '@mui/material'
 import Head from 'next/head'
 import { Box, AppBar, Toolbar, Typography, Button, Grid, UserButton } from '@mui/material'
-
+const handleSubmit = async () => {
+    const checkoutSession = await fetch('/api/checkout_sessions', {
+      method: 'POST',
+      headers: { origin: 'http://localhost:3000' },
+    })
+    const checkoutSessionJson = await checkoutSession.json()
+  
+    const stripe = await getStripe()
+    const {error} = await stripe.redirectToCheckout({
+      sessionId: checkoutSessionJson.id,
+    })
+  
+    if (error) {
+      console.warn(error.message)
+    }
+  }
 export default function Home() {
     return (            
         <Container>
@@ -106,6 +123,7 @@ export default function Home() {
                             border: "1px solid",
                             borderColor: "grey.300",
                             borderRadius: 2,
+                           // Attach the handleSubmit function to the onClick event
                         }}
                     >
                         <Typography variant="h5" gutterBottom>
@@ -116,9 +134,9 @@ export default function Home() {
                         </Typography>
                         <Typography>
                             {''}
-                            Unlimied flascards and storage with priority support.
+                            Unlimited flascards and storage with priority support.
                         </Typography>
-                        <Button variant="contained" color="primary" sx={{mt: 2}}>
+                        <Button variant="contained" color="primary" sx={{mt: 2}}  onClick={handleSubmit}>
                             Choose Pro
                             </Button>
                         </Box> 
