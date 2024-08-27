@@ -1,56 +1,59 @@
-import {NextResponse} from "next/server"
-import Stripe from "stripe"
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+import { NextResponse } from "next/server";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const formatAmountForStripe = (amount) => {
-    return Math.round(amount * 100)
-}
+  return Math.round(amount * 100); // Convert dollars to cents
+};
 
 export async function POST(req) {
-    const params = {
-        submit_type: 'subscription',
-        payment_method_types: ['card'],
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pro Subscription'
-                    },
-                    unit_amount: formatAmountForStripe(10),
-                    recurring: {
-                        interval: 'month',
-                        interval_count: 1,
-                    }
-                },
-                quantity: 1,
-            },
+  try {
+    const { planType } = await req.json();
 
-        ],
-        success_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const successUrl = `${baseUrl}/result?session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = `${baseUrl}/result?session_id={CHECKOUT_SESSION_ID}`;
+
+    const planPrices = {
+      basic: 5,
+      pro: 10,
     };
-    const checkoutSession = await stripe.checkout.sessions.create(params);
 
-    return NextResponse.json(checkoutSession), {
-        status: 200,
+    const priceInDollars = planPrices[planType];
+    if (!priceInDollars) {
+      throw new Error('Invalid plan type');
     }
-}
 
-export async function GET(req) {
-    const searchParams = req.nextUrl.searchParams
-    const session_id = searchParams.get('session_id')
-  
-    try {
-      if (!session_id) {
-        throw new Error('Session ID is required')
-      }
-  
-      const checkoutSession = await stripe.checkout.sessions.retrieve(session_id)
-  
-      return NextResponse.json(checkoutSession)
-    } catch (error) {
-      console.error('Error retrieving checkout session:', error)
-      return NextResponse.json({ error: { message: error.message } }, { status: 500 })
-    }
+    const unitAmount = formatAmountForStripe(priceInDollars);
+
+    const checkoutSession = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: `${planType.charAt(0).toUpperCase() + planType.slice(1)} Subscription`,
+            },
+            unit_amount: unitAmount,
+            recurring: {
+              interval: 'month',
+              interval_count: 1,
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+    });
+
+    return NextResponse.json({ id: checkoutSession.id });
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+    return NextResponse.json({ error: { message: error.message } }, { status: 500 });
+  }
 }
