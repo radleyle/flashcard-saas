@@ -7,22 +7,40 @@ import Link from 'next/link' // Import the Link component
 import {Container} from '@mui/material'
 import Head from 'next/head'
 import { Box, AppBar, Toolbar, Typography, Button, Grid, UserButton } from '@mui/material'
-const handleSubmit = async () => {
-    const checkoutSession = await fetch('/api/checkout_sessions', {
-      method: 'POST',
-      headers: { origin: 'http://localhost:3000' },
-    })
-    const checkoutSessionJson = await checkoutSession.json()
+// const handleSubmit = async () => {
+//     const checkoutSession = await fetch('/api/checkout_sessions', {
+//       method: 'POST',
+//       headers: { origin: 'http://localhost:3000' },
+//     })
+//     const checkoutSessionJson = await checkoutSession.json()
   
-    const stripe = await getStripe()
-    const {error} = await stripe.redirectToCheckout({
-      sessionId: checkoutSessionJson.id,
-    })
+//     const stripe = await getStripe()
+//     const {error} = await stripe.redirectToCheckout({
+//       sessionId: checkoutSessionJson.id,
+//     })
   
-    if (error) {
-      console.warn(error.message)
-    }
+//     if (error) {
+//       console.warn(error.message)
+//     }
+//   }
+const handleSubmit = async (planType) => {
+  const response = await fetch('/api/checkout_sessions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ planType }), // Pass planType in the request body
+  });
+  
+  const checkoutSessionJson = await response.json();
+  const stripe = await getStripe();
+  
+  const { error } = await stripe.redirectToCheckout({
+    sessionId: checkoutSessionJson.id,
+  });
+  
+  if (error) {
+    console.warn(error.message);
   }
+};
 export default function Home() {
     return (            
         <Container>
@@ -111,7 +129,7 @@ export default function Home() {
                                 {''}
                                 Access to basic flashcard features and limited storage.
                             </Typography>
-                            <Button variant="contained" color="primary" sx={{mt: 2}}>
+                            <Button variant="contained" color="primary" sx={{mt: 2}}onClick={() => handleSubmit('basic')}>
                                 Choose Basic
                             </Button>
                         </Box>
@@ -136,7 +154,7 @@ export default function Home() {
                             {''}
                             Unlimited flascards and storage with priority support.
                         </Typography>
-                        <Button variant="contained" color="primary" sx={{mt: 2}}  onClick={handleSubmit}>
+                        <Button variant="contained" color="primary" sx={{mt: 2}}  onClick={() => handleSubmit('pro')}>
                             Choose Pro
                             </Button>
                         </Box> 
