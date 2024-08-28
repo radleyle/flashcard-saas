@@ -1,3 +1,8 @@
+import { Container, AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import Link from 'next/link';
+// import { SignIn } from '@clerk/nextjs';  // Assuming you're using Clerk for authentication
+// import {ClerkProvider, SignedIn, SignedOut, SignInButton, SignIn, SignOutButton,UserButton } from '@clerk/nextjs'
+import { SignIn, SignUp } from '@clerk/nextjs';
 export default function SignUpPage() {
     return <Container maxWidth="sm">
         <AppBar position="static" sx={{backgroundColor: "#3f51b5"}}>
@@ -7,7 +12,7 @@ export default function SignUpPage() {
                     sx={{flexGrow: 1}}>
                         Flashcard SaaS
                 </Typography>
-                <Button color="inherit">
+                {/* <Button color="inherit">
                     <Link href="/sign-in" passHref>
                         Log In
                     </Link>
@@ -16,9 +21,10 @@ export default function SignUpPage() {
                     <Link href="/sign-up" passHref>
                         Sign Up
                     </Link>
-                </Button>
+                </Button> */}
             </Toolbar>
         </AppBar>
+        
 
         <Box
             display="flex"
