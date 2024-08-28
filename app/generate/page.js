@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -28,6 +27,17 @@ import { doc, collection, getDoc, writeBatch, setDoc, getDocs, deleteDoc } from 
 import { db } from '../../firebase';
 import { useUser } from '@clerk/nextjs';
 
+// Helper function to ensure user document exists
+const createUserDocument = async (userId) => {
+  const userDocRef = doc(db, 'users', userId);
+  const userDocSnap = await getDoc(userDocRef);
+
+  if (!userDocSnap.exists()) {
+    await setDoc(userDocRef, { flashcardSets: [] });
+  }
+};
+
+// Flashcard component
 const Flashcard = ({ front, back }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -47,12 +57,13 @@ const Flashcard = ({ front, back }) => {
         sx={{ position: 'absolute', top: 10, right: 10 }}
         onClick={handleFlip}
       >
-    
+       
       </IconButton>
     </Card>
   );
 };
 
+// FlashcardSet component
 const FlashcardSet = ({ set, onClick, onDelete }) => {
   return (
     <Card sx={{ mb: 2, position: 'relative' }}>
@@ -85,52 +96,53 @@ export default function Generate() {
   const [savedFlashcardsSets, setSavedFlashcardsSets] = useState([]);
   const [selectedSet, setSelectedSet] = useState(null);
 
+  // Open and close dialog handlers
   const handleOpenDialog = () => setDialogOpen(true);
   const handleCloseDialog = () => setDialogOpen(false);
 
-
+  // Save flashcards function
   const saveFlashcards = async () => {
     if (!setName.trim()) {
       alert('Please enter a name for your flashcard set.');
       return;
     }
-  
+
     if (!user) {
-      alert('User is not authenticated.');
+      alert('Please Log in to Save Cards');
       return;
     }
-  
+
     try {
       const userDocRef = doc(db, 'users', user.id);
       const userDocSnap = await getDoc(userDocRef);
-  
+
       if (!userDocSnap.exists()) {
         alert('User document not found.');
         return;
       }
-  
+
       const userData = userDocSnap.data();
       const existingSets = userData.flashcardSets || [];
-  
+
       // Check for duplicate set names
       const isDuplicate = existingSets.some(set => set.name === setName);
       if (isDuplicate) {
         alert('A flashcard set with this name already exists. Please choose a different name.');
         return;
       }
-  
+
       const batch = writeBatch(db);
-  
+
       // Update user's flashcardSets
       const updatedSets = [...existingSets, { name: setName }];
       batch.update(userDocRef, { flashcardSets: updatedSets });
-  
+
       // Save flashcards
       const setDocRef = doc(collection(userDocRef, 'flashcardSets'), setName);
       batch.set(setDocRef, { flashcards });
-  
+
       await batch.commit();
-  
+
       alert('Flashcards saved successfully!');
       handleCloseDialog();
       setSetName('');
@@ -140,8 +152,8 @@ export default function Generate() {
       alert(`An error occurred while saving flashcards: ${error.message}`);
     }
   };
-  
 
+  // Handle flashcard generation
   const handleSubmit = async () => {
     if (!text.trim()) {
       alert('Please enter some text to generate flashcards.');
@@ -166,6 +178,7 @@ export default function Generate() {
     }
   };
 
+  // Fetch saved flashcard sets
   const fetchSavedFlashcards = async () => {
     if (!user) return;
 
@@ -193,6 +206,7 @@ export default function Generate() {
     }
   };
 
+  // Handle delete flashcard set
   const handleDeleteSet = async (setToDelete) => {
     if (!user) return;
 
@@ -223,7 +237,10 @@ export default function Generate() {
   };
 
   useEffect(() => {
-    fetchSavedFlashcards(); // Fetch saved flashcards on component mount
+    if (user) {
+      createUserDocument(user.id);
+      fetchSavedFlashcards();
+    }
   }, [user]);
 
   return (
@@ -235,7 +252,7 @@ export default function Generate() {
           </Typography>
           <SignedOut>
             <Button color="inherit" href="/sign-in">Login</Button>
-            <Button colot="inherit" href="/sign-up">Sign up</Button>
+            <Button color="inherit" href="/sign-up">Sign up</Button>
           </SignedOut>
           <SignedIn>
             <UserButton />
@@ -361,5 +378,3 @@ export default function Generate() {
     </>
   );
 }
-
-
