@@ -51,10 +51,6 @@ export default function Home() {
           </SignedIn>
         </Toolbar>
       </AppBar>
-      
-      
-
-
             <Box
                 sx={{
                     textAlign: 'center',

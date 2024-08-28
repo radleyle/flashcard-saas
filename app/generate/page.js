@@ -235,6 +235,7 @@ export default function Generate() {
           </Typography>
           <SignedOut>
             <Button color="inherit" href="/sign-in">Login</Button>
+            <Button colot="inherit" href="/sign-up">Sign up</Button>
           </SignedOut>
           <SignedIn>
             <UserButton />
