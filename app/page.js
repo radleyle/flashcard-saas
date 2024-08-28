@@ -43,7 +43,7 @@ export default function Home() {
           {/* Conditionally render Sign In / Sign Up buttons */}
           <SignedOut>
             <Button color="inherit" href="/sign-in">Login</Button>
-            {/* <Button color="inherit" href="/sign-up">Sign up</Button> */}
+            <Button color="inherit" href="/sign-up">Sign up</Button>
           </SignedOut>
           {/* Conditionally render UserButton when signed in */}
           <SignedIn>
