@@ -1,21 +1,36 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore'; // Import Firestore functions
+// import { getAnalytics } from 'firebase/analytics'; // Optional, if you use Analytics
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBbn6Rg7nHLmMejQIknqN1X_WN_4rXxrGc",
+//   authDomain: "flashcardsaas-1b1ba.firebaseapp.com",
+//   projectId: "flashcardsaas-1b1ba",
+//   storageBucket: "flashcardsaas-1b1ba.appspot.com",
+//   messagingSenderId: "827881320139",
+//   appId: "1:827881320139:web:6292b7a6c86ab0ddcf754e",
+//   measurementId: "G-7P47C9DRE7"
+// };
 const firebaseConfig = {
-  apiKey: "AIzaSyBbn6Rg7nHLmMejQIknqN1X_WN_4rXxrGc",
-  authDomain: "flashcardsaas-1b1ba.firebaseapp.com",
-  projectId: "flashcardsaas-1b1ba",
-  storageBucket: "flashcardsaas-1b1ba.appspot.com",
-  messagingSenderId: "827881320139",
-  appId: "1:827881320139:web:6292b7a6c86ab0ddcf754e",
-  measurementId: "G-7P47C9DRE7"
+  apiKey: "AIzaSyB5Ra8-ajdJ4SVKdXmw7r_jNypfklsyirg",
+  authDomain: "flashcard-77b47.firebaseapp.com",
+  projectId: "flashcard-77b47",
+  storageBucket: "flashcard-77b47.appspot.com",
+  messagingSenderId: "132310495504",
+  appId: "1:132310495504:web:a0b5d0fc05bad5b6493595",
+  measurementId: "G-6QZZ002R9T"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const db = getFirestore(app);
+
+export { db };
