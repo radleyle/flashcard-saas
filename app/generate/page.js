@@ -57,7 +57,7 @@ const Flashcard = ({ front, back }) => {
         sx={{ position: 'absolute', top: 10, right: 10 }}
         onClick={handleFlip}
       >
-        <FlipIcon />
+       
       </IconButton>
     </Card>
   );
