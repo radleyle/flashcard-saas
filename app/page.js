@@ -3,26 +3,12 @@ import Image from 'next/image'
 import getStripe from '@/utils/get-stripe'
 import Link from 'next/link' // Import the Link component
 
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'; // Assuming you're using Clerk for auth
 
 import {Container} from '@mui/material'
 import Head from 'next/head'
-import { Box, AppBar, Toolbar, Typography, Button, Grid, UserButton } from '@mui/material'
-// const handleSubmit = async () => {
-//     const checkoutSession = await fetch('/api/checkout_sessions', {
-//       method: 'POST',
-//       headers: { origin: 'http://localhost:3000' },
-//     })
-//     const checkoutSessionJson = await checkoutSession.json()
-  
-//     const stripe = await getStripe()
-//     const {error} = await stripe.redirectToCheckout({
-//       sessionId: checkoutSessionJson.id,
-//     })
-  
-//     if (error) {
-//       console.warn(error.message)
-//     }
-//   }
+import { Box, AppBar, Toolbar, Typography, Button, Grid } from '@mui/material'
+
 const handleSubmit = async (planType) => {
   const response = await fetch('/api/checkout_sessions', {
     method: 'POST',
@@ -48,6 +34,24 @@ export default function Home() {
                 <title>Flashcard Creator</title>
                 <meta name="description" content="Create flashcards for your next quiz or test" />
             </Head>
+
+            <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" style={{ flexGrow: 1 }}>
+            Flashcard SaaS
+          </Typography>
+          {/* Conditionally render Sign In / Sign Up buttons */}
+          <SignedOut>
+            <Button color="inherit" href="/sign-in">Login</Button>
+            {/* <Button color="inherit" href="/sign-up">Sign up</Button> */}
+          </SignedOut>
+          {/* Conditionally render UserButton when signed in */}
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </Toolbar>
+      </AppBar>
+
 
             <Box
                 sx={{
