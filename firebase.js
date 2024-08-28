@@ -20,13 +20,13 @@ import { getFirestore } from 'firebase/firestore'; // Import Firestore functions
 //   measurementId: "G-7P47C9DRE7"
 // };
 const firebaseConfig = {
-  apiKey: "AIzaSyB5Ra8-ajdJ4SVKdXmw7r_jNypfklsyirg",
-  authDomain: "flashcard-77b47.firebaseapp.com",
-  projectId: "flashcard-77b47",
-  storageBucket: "flashcard-77b47.appspot.com",
-  messagingSenderId: "132310495504",
-  appId: "1:132310495504:web:a0b5d0fc05bad5b6493595",
-  measurementId: "G-6QZZ002R9T"
+  apiKey: "AIzaSyDRvv_c6R4GP-pL2g15WPMP7tDwVEEDY28",
+  authDomain: "flashcard-saas-cb092.firebaseapp.com",
+  projectId: "flashcard-saas-cb092",
+  storageBucket: "flashcard-saas-cb092.appspot.com",
+  messagingSenderId: "559032292919",
+  appId: "1:559032292919:web:df7d71788886f33384d1b2",
+  measurementId: "G-W4JE48T6TR"
 };
 
 // Initialize Firebase

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.29",
-    "@clerk/nextjs": "^5.3.3",
+    "@clerk/nextjs": "^5.3.6",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
