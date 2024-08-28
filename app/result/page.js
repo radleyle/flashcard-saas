@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation'; // Use next/navigation
 import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
@@ -12,15 +11,20 @@ const ResultPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const session_id = searchParams.get('session_id');
-  
+
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCheckoutSession = async () => {
-      if (!session_id) return;
+    // Ensure we have a session_id before making the fetch call
+    if (!session_id) {
+      setError('No session ID provided.');
+      setLoading(false);
+      return;
+    }
 
+    const fetchCheckoutSession = async () => {
       try {
         const res = await fetch(`/api/checkout_sessions?session_id=${session_id}`);
         const sessionData = await res.json();
@@ -28,7 +32,7 @@ const ResultPage = () => {
         if (res.ok) {
           setSession(sessionData);
         } else {
-          setError(sessionData.error);
+          setError(sessionData.error || 'Failed to fetch session data.');
         }
       } catch (err) {
         setError('An error occurred while retrieving the session.');

@@ -20,7 +20,7 @@ export default function SignUpPage() {
                     <Link href="/sign-up" passHref>
                         Sign Up
                     </Link>
-                </Button>
+                </Button> 
             </Toolbar>
         </AppBar>
         
@@ -33,7 +33,7 @@ export default function SignUpPage() {
             height="100vh"
         >
             <Typography variant="h4" gutterBottom>
-                Login
+                Sign up
             </Typography>
             <SignIn />
         </Box>
