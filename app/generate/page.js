@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Grid from '@mui/material/Grid';
 import {
   Container,
@@ -179,7 +179,7 @@ export default function Generate() {
   };
 
   // Fetch saved flashcard sets
-  const fetchSavedFlashcards = async () => {
+  const fetchSavedFlashcards = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -204,7 +204,7 @@ export default function Generate() {
     } catch (error) {
       console.error('Error fetching saved flashcards:', error);
     }
-  };
+  }, [user]);
 
   // Handle delete flashcard set
   const handleDeleteSet = async (setToDelete) => {
@@ -241,7 +241,7 @@ export default function Generate() {
       createUserDocument(user.id);
       fetchSavedFlashcards();
     }
-  }, [user]);
+  }, [user, fetchSavedFlashcards]);
 
   return (
     <>
